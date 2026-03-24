@@ -1,0 +1,219 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #0f0f0f;
+    color: #e0e0e0;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+#container {
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+}
+
+.planes {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: #111111;
+}
+
+/* Sidebar Styles */
+#toolbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 300px;
+    height: 100vh;
+    background: rgba(25, 25, 35, 0.95);
+    border-right: 1px solid #4a4a5a;
+    padding: 20px;
+    z-index: 1000;
+    overflow-y: auto;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease;
+}
+
+/* Show sidebar when it has the active class */
+#toolbar.active {
+    transform: translateX(0%);
+}
+
+/* Toggle button - positioned outside but moves with sidebar */
+#sidebar-toggle {
+    position: fixed;
+    top: 20px;
+    left: 20px; /* Visible position when sidebar is hidden */
+    width: 40px;
+    height: 40px;
+    background: #3a3a4a;
+    color: #e0e0e0;
+    border: 1px solid #4a4a5a;
+    border-radius: 4px;
+    cursor: pointer;
+    z-index: 1001;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+/* When sidebar is active, move the button to the right edge of sidebar */
+#toolbar.active ~ #sidebar-toggle {
+    left: 320px; /* 300px sidebar width + 20px offset */
+}
+
+#toolbar > div {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.white-text {
+    color: #d0d0d0;
+    font-weight: bold;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.input-style{
+    padding: 10px 12px;
+    border: 1px solid #4a4a5a;
+    border-radius: 4px;
+    background: rgba(40, 40, 50, 0.8);
+    color: #e0e0e0;
+    font-size: 14px;
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.input-style:focus {
+    outline: none;
+    border-color: #6a6a7a;
+    background: rgba(50, 50, 60, 0.8);
+}
+
+.button-style {
+    padding: 12px 24px;
+    background: #3a3a4a;
+    color: #e0e0e0;
+    border: none;
+    border-radius: 4px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 20px;
+    width: 100%;
+}
+
+#button-style:hover {
+    background: #4a4a5a;
+}
+
+#options {
+    margin-top: 20px;
+}
+
+#options > div {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+#options button {
+    padding: 10px 16px;
+    background: #2a2a3a;
+    color: #e0e0e0;
+    border: 1px solid #4a4a5a;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: bold;
+    flex: 1;
+    min-width: 30px;
+}
+
+#options button:hover {
+    background: #3a3a4a;
+    border-color: #5a5a6a;
+}
+
+/* Hide all planes initially except the first one */
+.planes {
+    display: none;
+}
+
+#complex-plane {
+    display: block;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    #toolbar {
+        width: 250px;
+        left: 250px;
+    }
+    
+    #sidebar-toggle {
+        left: 270px; /* 250px sidebar width + 20px offset */
+    }
+}
+
+@media (max-width: 480px) {
+    #toolbar {
+        width: 220px;
+        padding: 15px;
+    }
+    
+    #toolbar.active ~ #sidebar-toggle {
+        left: 240px; /* 220px sidebar width + 20px offset */
+    }
+    
+    #sidebar-toggle {
+        width: 35px;
+        height: 35px;
+        top: 15px;
+        left: 15px;
+    }
+}
+
+.calculating-buttons{
+    position: relative;
+    margin-top: 5px;
+    width: 175px;
+    left: 50%;
+    transform: translate(-50%,0%);
+    
+}
+
+.white-font{
+    position: relative;
+    font-size: 15px
+}
+
+#code-input{
+    background-color: #3a3a4a;
+    border-color: transparent;
+    font-family:Consolas, 'Courier New', monospace;
+    color: rgb(214, 214, 214);
+    font-size: 16px;
+}
+
+#code-input{
+    position: relative;
+    left: 20px; 
+    margin-top: 4px;
+    resize: vertical;
+    width: 90%;
+    outline: none;
+}

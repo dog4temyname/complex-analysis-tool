@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complex Plane Visualizer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="container" draggable="false">
+        <canvas class="planes" id="complex-plane" height="593" width="1265" draggable="false"></canvas>
+        <canvas class="planes" id="vector-field" height="593" width="1265" draggable="false"></canvas>
+        <canvas class="planes" id="3d-complex-plane" height="593" width="1265" draggable="false"></canvas>
+        <canvas class="planes" id="transformation-plane" height="593" width="1265" draggable="false"></canvas>
+        <canvas class="planes" id="integral-plane" height="593" width="1265" draggable="false" style="display: block; background-color: transparent; z-index: 100;"></canvas>
+        <canvas class="planes" id="derivative-plane" height="593" width="1265" draggable="false" style="display: block; background-color: transparent; z-index: 100;"></canvas>
+        
+        <!-- Toolbar comes FIRST -->
+        <div id="toolbar">
+            <div>
+                <div>
+                    <label class="white-text" for="formula-input">Input</label>
+                    <input class="input-style" type="text" id="formula-input">
+                    <button class="button-style" onclick="switchFunctionType()">Custom function</button>
+                    <div>
+                        <p style="font-family:Consolas, 'Courier New', monospace">function f(z){</p>
+                        <p style="position: relative; font-family:Consolas, 'Courier New', monospace;left: 20px;">let fz</p>
+                        <textarea id="code-input"></textarea>
+                        <p style="position: relative; left: 20px; font-family:Consolas, 'Courier New', monospace">return fz</p>
+                        <p style="font-family:Consolas, 'Courier New', monospace">}</p>
+
+                    </div>
+                    
+                </div>
+                <div>
+                    <label class="white-text" for="zoom-input">Zoom</label>
+                    <input class="input-style" type="text" id="zoom-input">
+                </div>
+                
+                <button class="button-style" id="draw-plane">
+                    DRAW
+                </button>
+                
+                <div id="options">
+                    <div>
+                        <button onclick="switchPlanes('complex-plane')">DC</button>
+                        <button onclick="switchPlanes('vector-field')">PVF</button>
+                        <button onclick="switchPlanes('3d-complex-plane')">3D</button>
+                        <button onclick="switchPlanes('transformation-plane')">TP</button>
+                    </div>
+                    <button class= "calculating-buttons" id="calculate-integral">Complex integral</button>
+                    <button class= "calculating-buttons" id="calculate-derivative" onclick="changeDerivativeToggle(1)">Complex derivative</button>
+                
+                    <div id="settings" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+                        <div style="position: relative;transform: translate(-50%, 0);left: 50%; ">
+                            <button id="change-derivative-direction" onclick="changeDerivativeToggle(0)">Change dz direction</button>
+                            <p class="white-font" style="margin-top: 5px;" id="dz-direction">z norm = </p>
+                        </div>
+                        <div style="text-align: center;">
+                            <p style="margin: 5px 0; font-weight: bold; left: 50%; transform: translate(50%, 0);">Display Mode</p>
+                        </div>
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <span style="flex: 1; text-align: center;">Abs</span>
+                            <div style="flex: 2; text-align: center;">
+                                <p style="margin: 5px 0;">Arg+Abs</p>
+                                <input id="dc-type-slider" type="range" min="-1" max="1" value="1" step="1" style="width: 80%;">
+                            </div>
+                            <span style="flex: 1; text-align: center;">Arg</span>
+                        </div>
+                        <div id="edit-gradient">
+                            <canvas style="width: 225px; height: 20px;" id="custom-gradient-canvas"></canvas>
+                            <div style="margin-top: 8px;">
+                                <label for="use-custom-gradient">Use custom gradient?</label>
+                                <input type="checkbox" name="" id="use-custom-gradient">
+                                <div>
+                                    <button onclick="addColorToGradient()">+</button>
+                                    <button onclick="removeColorToGradient()">-</button>
+                                    <input id="color-picker-gradient" type="color" style="position: relative; top:9px">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <button style="margin-top: 10px; width: 100%;">Settings</button>
+                </div>
+            </div>
+            <div class="white-font">
+                <p id="latex-coordinates" style="height: 25px;">$$ z =  $$</p>
+                <p id="latex-coordinates-number"></p>
+            </div>
+            <div class="white-font">
+                <p id="latex-function" style="height: 25px;">$$ f(z) =  $$</p>
+                <p id="latex-function-number" ></p>
+            </div>
+            <div class="white-font">
+                <p id="latex-integral" style="height: 40px;">$$ \int_{\gamma}f(z)dz= $$</p>
+                <p id="latex-integral-number" ></p>
+            </div>
+            <div class="white-font">
+                <p id="latex-derivative" style="height: 40px;">$$ \frac{df(z)}{dz} = $$</p>
+                <p id="latex-derivative-number"></p>
+            </div>
+        </div>
+        
+        <!-- Button comes AFTER toolbar -->
+        <button id="sidebar-toggle">☰</button>
+    </div>
+    <script src="custom-function-handler.js"></script>
+    <script src="custom-gradient.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r79/three.min.js"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script src="COMPLEX MATH/KiMath.js"></script>
+    <script src="COMPLEX MATH/complex-kimath.js"></script>
+    <script src="COMPLEX MATH/math-expression-converter.js"></script>
+    <script src="converters.js"></script>
+    <script src="domain-coloring.js"></script>
+    <script src="vector-field.js"></script>
+    <script type="module" src="3d-domain-coloring.js"></script>
+    <script src="plane-transformation.js"></script>
+    <script src="complex-integrals.js"></script>
+    <script src="complex-derivative.js"></script>
+    <script type="module" src="switcher.js"></script>
+
+    
+    <script>
+        const toggleButton = document.getElementById('sidebar-toggle');
+        const toolbar = document.getElementById('toolbar');
+        
+        toggleButton.addEventListener('click', function() {
+            toolbar.classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
